@@ -39,7 +39,7 @@
       arButton.addEventListener('click', () => {
         // Check if the browser supports WebXR
         if (navigator.xr) {
-          navigator.xr.requestSession('immersive-ar', { requiredFeatures: ['local'] })
+          navigator.xr.requestSession('immersive-ar', { requiredFeatures: ['local', 'camera-access'] })
             .then((session) => {
               // Set the AR session on the renderer
               renderer.xr.setSession(session);
