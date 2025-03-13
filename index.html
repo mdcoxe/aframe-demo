@@ -43,6 +43,8 @@
             .then((session) => {
               // Set the AR session on the renderer
               renderer.xr.setSession(session);
+              scene.background = null;
+
             })
             .catch((err) => {
               console.error('Failed to start AR session:', err);
