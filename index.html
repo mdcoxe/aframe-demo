@@ -1,75 +1,17 @@
-<!DOCTYPE html>
+
 <html>
   <head>
-    <meta charset="utf-8">
-    <title>Three.js WebAR Demo</title>
-    <!-- Three.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/dist/mindar-image.prod.js"></script>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/dist/mindar-image-aframe.prod.js"></script>
   </head>
-  <body style="margin: 0; overflow: hidden;">
-    <!-- Button to start the AR session -->
-    <button id="start-ar" style="position: absolute; z-index: 100; top: 20px; left: 20px;">Start AR</button>
-    
-    <script>
-      let scene, camera, renderer, cube;
-      
-      // Create the Three.js scene
-      scene = new THREE.Scene();
-      
-      // Create a camera (parameters won't affect AR as the XR session will control it)
-      camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
-      
-      // Set up the WebGL renderer with alpha for transparency
-      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      // Enable XR on the renderer
-      renderer.xr.enabled = true;
-      document.body.appendChild(renderer.domElement);
-      
-      // Create a simple cube geometry and add it to the scene
-      const geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
-      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-      cube = new THREE.Mesh(geometry, material);
-      // Position the cube 1 meter in front of the initial camera position
-      cube.position.set(0, 0, -1);
-      scene.add(cube);
-      
-      // Set up the AR button
-      const arButton = document.getElementById('start-ar');
-      arButton.addEventListener('click', () => {
-        // Check if the browser supports WebXR
-        if (navigator.xr) {
-          navigator.xr.requestSession('immersive-ar', { requiredFeatures: ['local'] })
-            .then((session) => {
-              // Set the AR session on the renderer
-              renderer.xr.setSession(session);
-              scene.background = null;
-
-            })
-            .catch((err) => {
-              console.error('Failed to start AR session:', err);
-            });
-        } else {
-          alert("WebXR is not available in this browser.");
-        }
-      });
-      
-      // Animation loop to rotate the cube
-      function animate() {
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
-        renderer.render(scene, camera);
-      }
-      
-      // Set the animation loop
-      renderer.setAnimationLoop(animate);
-      
-      // Handle window resizing
-      window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-      });
-    </script>
+  <body>
+    <a-scene mindar-image="imageTargetSrc: ./targets.mind;" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-plane color="blue" opaciy="0.5" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
+      </a-entity>
+    </a-scene>
   </body>
 </html>
